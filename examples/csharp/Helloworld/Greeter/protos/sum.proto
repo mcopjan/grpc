@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+message SumRequest{
+
+  repeated int32 numbers = 1; 
+}
+
+message SumResponse{
+
+  int32 result = 1;
+}
+
+service SumService{
+
+  rpc SumNumbers (SumRequest) returns (SumResponse){}
+}

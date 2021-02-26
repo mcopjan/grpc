@@ -13,6 +13,8 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
+using Greeterudemy;
 using Grpc.Core;
 using Helloworld;
 
@@ -24,11 +26,19 @@ namespace GreeterClient
         {
             Channel channel = new Channel("127.0.0.1:30051", ChannelCredentials.Insecure);
 
-            var client = new Greeter.GreeterClient(channel);
-            String user = "you";
+            //var client = new GreetingService.GreetingServiceClient(channel);
+            //String user = "you";
+            //var reply = client.Greet(new GreetingRequest() { Person = new Person() { FirstName = "Martin", LastName = "Copjan" } });
+            var client = new SumService.SumServiceClient(channel);
+            var numbers = new List<int>() { 1, 2, 3, 4 };
+            var req = new SumRequest();
+            foreach (var num in numbers)
+            {
+                req.Numbers.Add(num);
+            }
 
-            var reply = client.SayHello(new HelloRequest { Name = user });
-            Console.WriteLine("Greeting: " + reply.Message);
+            var response = client.SumNumbers(req);
+            Console.WriteLine($"Summary of numbers {string.Join(',', numbers)} is: " + response.Result);
 
             channel.ShutdownAsync().Wait();
             Console.WriteLine("Press any key to exit...");
